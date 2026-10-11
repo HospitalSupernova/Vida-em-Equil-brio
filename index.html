@@ -1,0 +1,1100 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vida em Equilíbrio</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f4f8f5;
+            color: #26382d;
+        }
+        header {
+            background-color: #2f7d4a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 6px;
+        }
+        header p {
+            font-size: 16px;
+        }
+        .tela {
+            display: none;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .tela.ativa {
+            display: block;
+        }
+        .card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #dce9df;
+        }
+        .inicio {
+            text-align: center;
+        }
+        .inicio h2 {
+            color: #2f7d4a;
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+        .inicio p {
+            max-width: 650px;
+            margin: 0 auto 25px;
+            line-height: 1.6;
+            color: #53645a;
+        }
+        input {
+            width: 100%;
+            max-width: 450px;
+            padding: 14px;
+            border: 1px solid #cbdacf;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+        input:focus {
+            border-color: #2f7d4a;
+        }
+        button {
+            border: none;
+            background-color: #2f7d4a;
+            color: white;
+            padding: 13px 22px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background-color: #25663b;
+            transform: translateY(-1px);
+        }
+        .titulo {
+            text-align: center;
+            color: #2f7d4a;
+            margin-bottom: 10px;
+        }
+        .subtitulo {
+            text-align: center;
+            color: #66756b;
+            margin-bottom: 25px;
+        }
+        .personagens {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .personagem {
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .personagem:hover {
+            transform: translateY(-5px);
+            border-color: #2f7d4a;
+        }
+        .avatar {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+            border-radius: 16px;
+            background-color: #e2f0e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .foto-destaque {
+            display: block;
+            width: min(100%, 280px);
+            height: 280px;
+            object-fit: cover;
+            object-position: center 25%;
+            margin: 0 auto 20px;
+            border-radius: 18px;
+            border: 4px solid #e2f0e5;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+        }
+        .cabecalho-situacao {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        .foto-jogo {
+            width: 90px;
+            height: 90px;
+            flex-shrink: 0;
+            object-fit: cover;
+            object-position: center 25%;
+            border-radius: 14px;
+            border: 3px solid #e2f0e5;
+        }
+        .cabecalho-situacao h2 {
+            margin: 0;
+        }
+        .personagem h3 {
+            color: #2f7d4a;
+            margin-bottom: 5px;
+        }
+        .personagem .idade {
+            color: #69776e;
+            margin-bottom: 12px;
+        }
+        .personagem p {
+            color: #59685f;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        .detalhes {
+            text-align: center;
+        }
+        .detalhes h2 {
+            color: #2f7d4a;
+            margin-bottom: 8px;
+        }
+        .detalhes > p {
+            color: #68766d;
+            margin-bottom: 25px;
+        }
+        .indicadores {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+        .indicador {
+            background-color: #f8fbf9;
+            border: 1px solid #dce9df;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: left;
+        }
+        .indicador-topo {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .barra {
+            width: 100%;
+            height: 12px;
+            background-color: #dfe8e1;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .barra-preenchida {
+            height: 100%;
+            background-color: #2f7d4a;
+            border-radius: 20px;
+            transition: width 0.4s;
+        }
+        .acoes {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .situacao {
+            max-width: 800px;
+            margin: auto;
+        }
+        .situacao h2 {
+            color: #2f7d4a;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .progresso {
+            text-align: center;
+            color: #6b796f;
+            margin-bottom: 25px;
+        }
+        .pergunta {
+            background-color: #f4f8f5;
+            border-left: 5px solid #2f7d4a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 18px;
+        }
+        .opcoes {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .opcao {
+            width: 100%;
+            text-align: left;
+            background-color: white;
+            color: #26382d;
+            border: 1px solid #d2e1d6;
+        }
+        .opcao:hover {
+            background-color: #edf6ef;
+            color: #26382d;
+        }
+        .feedback {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 10px;
+            background-color: #e7f3ea;
+            color: #285c39;
+            line-height: 1.5;
+        }
+        .feedback button {
+            margin-top: 15px;
+        }
+        .resultado {
+            text-align: center;
+        }
+        .resultado h2 {
+            color: #2f7d4a;
+            margin-bottom: 15px;
+        }
+        .pontuacao-final {
+            font-size: 42px;
+            color: #2f7d4a;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .mensagem-final {
+            color: #65736a;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .perfil {
+            text-align: center;
+        }
+        .perfil h2 {
+            color: #2f7d4a;
+            margin-bottom: 20px;
+        }
+        .estatisticas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .estatistica {
+            background-color: #f8fbf9;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #dce9df;
+        }
+        .estatistica strong {
+            display: block;
+            font-size: 28px;
+            color: #2f7d4a;
+            margin-bottom: 5px;
+        }
+        .estatistica span {
+            color: #69776e;
+            font-size: 14px;
+        }
+        @media (max-width: 750px) {
+            .personagens {
+                grid-template-columns: 1fr;
+            }
+            .indicadores {
+                grid-template-columns: 1fr;
+            }
+            .estatisticas {
+                grid-template-columns: 1fr;
+            }
+            .cabecalho-situacao {
+                flex-direction: column;
+                text-align: center;
+            }
+            .foto-destaque {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Vida em Equilíbrio</h1>
+        <p>Aprender a cuidar da saúde também pode ser um desafio!</p>
+    </header>
+    <main>
+        <section id="telaInicio" class="tela ativa">
+            <div class="card inicio">
+                <h2>Desafio Vida Saudável</h2>
+                <p>Você será um instrutor responsável por acompanhar um personagem durante sua rotina e ajudá-lo a tomar decisões mais saudáveis.</p>
+                <p>Digite seu nome para começar:</p>
+                <input type="text" id="nomeInstrutor" placeholder="Nome do instrutor">
+                <br>
+                <button onclick="iniciarJogo()">Começar</button>
+            </div>
+        </section>
+        <section id="telaPersonagens" class="tela">
+            <h2 class="titulo">Escolha seu personagem</h2>
+            <p class="subtitulo">Cada personagem possui necessidades diferentes. Escolha um deles para começar seu acompanhamento.</p>
+            <div id="listaPersonagens" class="personagens"></div>
+            <div class="acoes">
+                <button onclick="mostrarPerfil()">Ver meu perfil</button>
+            </div>
+        </section>
+        <section id="telaPersonagem" class="tela">
+            <div class="card detalhes">
+                <img id="fotoPersonagemDetalhes" class="foto-destaque" src="" alt="">
+                <h2 id="nomePersonagem"></h2>
+                <p id="descricaoPersonagem"></p>
+                <div class="indicadores">
+                    <div class="indicador">
+                        <div class="indicador-topo">
+                            <span>Alimentação</span>
+                            <span id="valorAlimentacao">0</span>
+                        </div>
+                        <div class="barra">
+                            <div id="barraAlimentacao" class="barra-preenchida"></div>
+                        </div>
+                    </div>
+                    <div class="indicador">
+                        <div class="indicador-topo">
+                            <span>Hidratação</span>
+                            <span id="valorHidratacao">0</span>
+                        </div>
+                        <div class="barra">
+                            <div id="barraHidratacao" class="barra-preenchida"></div>
+                        </div>
+                    </div>
+                    <div class="indicador">
+                        <div class="indicador-topo">
+                            <span>Atividade</span>
+                            <span id="valorAtividade">0</span>
+                        </div>
+                        <div class="barra">
+                            <div id="barraAtividade" class="barra-preenchida"></div>
+                        </div>
+                    </div>
+                    <div class="indicador">
+                        <div class="indicador-topo">
+                            <span>Descanso</span>
+                            <span id="valorDescanso">0</span>
+                        </div>
+                        <div class="barra">
+                            <div id="barraDescanso" class="barra-preenchida"></div>
+                        </div>
+                    </div>
+                </div>
+                <p>Pontuação do instrutor: <strong id="pontuacao">0</strong></p>
+                <div class="acoes">
+                    <button onclick="iniciarSituacoes()">Começar acompanhamento</button>
+                    <button onclick="voltarPersonagens()">Escolher outro personagem</button>
+                </div>
+            </div>
+        </section>
+        <section id="telaSituacoes" class="tela">
+            <div class="card situacao">
+                <div class="cabecalho-situacao">
+                    <img id="fotoPersonagemSituacao" class="foto-jogo" src="" alt="">
+                    <h2>Rotina de <span id="nomeSituacao"></span></h2>
+                </div>
+                <p class="progresso">Situação <span id="numeroSituacao">1</span> de 5</p>
+                <div class="pergunta" id="pergunta"></div>
+                <div class="opcoes" id="opcoes"></div>
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </section>
+        <section id="telaResultado" class="tela">
+            <div class="card resultado">
+                <img id="fotoPersonagemResultado" class="foto-destaque" src="" alt="">
+                <h2>Acompanhamento concluído!</h2>
+                <p>Você terminou o acompanhamento de <strong id="resultadoPersonagem"></strong>.</p>
+                <div class="pontuacao-final" id="pontuacaoFinal">0</div>
+                <p class="mensagem-final" id="mensagemFinal"></p>
+                <div class="indicadores">
+                    <div class="indicador">
+                        <div class="indicador-topo">
+                            <span>Alimentação</span>
+                            <span id="resultadoAlimentacao">0</span>
+                        </div>
+                        <div class="barra">
+                            <div id="resultadoBarraAlimentacao" class="barra-preenchida"></div>
+                        </div>
+                    </div>
+                    <div class="indicador">
+                        <div class="indicador-topo">
+                            <span>Hidratação</span>
+                            <span id="resultadoHidratacao">0</span>
+                        </div>
+                        <div class="barra">
+                            <div id="resultadoBarraHidratacao" class="barra-preenchida"></div>
+                        </div>
+                    </div>
+                    <div class="indicador">
+                        <div class="indicador-topo">
+                            <span>Atividade</span>
+                            <span id="resultadoAtividade">0</span>
+                        </div>
+                        <div class="barra">
+                            <div id="resultadoBarraAtividade" class="barra-preenchida"></div>
+                        </div>
+                    </div>
+                    <div class="indicador">
+                        <div class="indicador-topo">
+                            <span>Descanso</span>
+                            <span id="resultadoDescanso">0</span>
+                        </div>
+                        <div class="barra">
+                            <div id="resultadoBarraDescanso" class="barra-preenchida"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="acoes">
+                    <button onclick="mostrarPersonagens()">Jogar novamente</button>
+                    <button onclick="mostrarPerfil()">Ver meu perfil</button>
+                </div>
+            </div>
+        </section>
+        <section id="telaPerfil" class="tela">
+            <div class="card perfil">
+                <h2>Perfil do Instrutor</h2>
+                <p>Instrutor: <strong id="perfilNome">---</strong></p>
+                <div class="estatisticas">
+                    <div class="estatistica">
+                        <strong id="perfilRecorde">0</strong>
+                        <span>Recorde</span>
+                    </div>
+                    <div class="estatistica">
+                        <strong id="perfilPartidas">0</strong>
+                        <span>Partidas</span>
+                    </div>
+                    <div class="estatistica">
+                        <strong id="perfilUltima">0</strong>
+                        <span>Última pontuação</span>
+                    </div>
+                </div>
+                <div class="acoes">
+                    <button onclick="mostrarPersonagens()">Escolher personagem</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+
+        let dadosJogador = {
+            nome: "",
+            recorde: 0,
+            partidas: 0,
+            ultimaPontuacao: 0
+        };
+        let personagemAtual = null;
+        let pontos = 0;
+        let situacaoAtual = 0;
+        let situacoesAtuais = [];
+        let personagens = [
+            {
+                nome: "Lucas",
+                idade: 16,
+                avatar: "👦",
+                imagem: "Lucas.png.png",
+                alimentacao: 45,
+                hidratacao: 30,
+                atividade: 60,
+                descanso: 70,
+                descricao: "Lucas pratica algumas atividades físicas, mas precisa melhorar principalmente sua alimentação e hidratação."
+            },
+            {
+                nome: "Marina",
+                idade: 15,
+                avatar: "👧",
+                imagem: "Marina.png.png",
+                alimentacao: 55,
+                hidratacao: 75,
+                atividade: 85,
+                descanso: 40,
+                descricao: "Marina é bastante ativa e se hidrata bem, mas precisa prestar mais atenção na alimentação e no descanso."
+            },
+            {
+                nome: "Pedro",
+                idade: 16,
+                avatar: "👦",
+                imagem: "Pedro.png.png",
+                alimentacao: 65,
+                hidratacao: 60,
+                atividade: 35,
+                descanso: 65,
+                descricao: "Pedro possui uma alimentação razoável e descansa bem, mas precisa diminuir o sedentarismo e praticar mais atividades."
+            }
+        ];
+        let situacoesLucas = [
+            {
+                pergunta: "Lucas acordou atrasado e está pensando em sair de casa sem tomar café da manhã. O que você recomenda?",
+                opcoes: [
+                    {
+                        texto: "Pular o café da manhã e esperar até o almoço.",
+                        pontos: 0,
+                        alimentacao: -5,
+                        feedback: "Lucas precisa evitar pular refeições com frequência e buscar uma rotina alimentar equilibrada."
+                    },
+                    {
+                        texto: "Fazer uma refeição simples e equilibrada antes de sair.",
+                        pontos: 10,
+                        alimentacao: 10,
+                        feedback: "Boa decisão! Lucas começou o dia cuidando melhor da alimentação."
+                    },
+                    {
+                        texto: "Comer apenas doces para ganhar energia rapidamente.",
+                        pontos: 2,
+                        alimentacao: -2,
+                        feedback: "Doces não devem substituir uma refeição equilibrada."
+                    }
+                ]
+            },
+            {
+                pergunta: "Durante a manhã, Lucas percebeu que passou várias horas sem beber água. O que você recomenda?",
+                opcoes: [
+                    {
+                        texto: "Esperar até sentir muita sede.",
+                        pontos: 0,
+                        hidratacao: -5,
+                        feedback: "É melhor que Lucas mantenha a hidratação ao longo do dia."
+                    },
+                    {
+                        texto: "Beber água e continuar se hidratando durante o dia.",
+                        pontos: 10,
+                        hidratacao: 10,
+                        feedback: "Boa escolha! Lucas está criando um hábito melhor de hidratação."
+                    },
+                    {
+                        texto: "Trocar a água por refrigerante.",
+                        pontos: 2,
+                        hidratacao: -2,
+                        feedback: "Refrigerante não deve substituir a água como principal opção de hidratação."
+                    }
+                ]
+            },
+            {
+                pergunta: "No almoço, Lucas percebeu que poderia montar um prato mais variado. Qual orientação você daria?",
+                opcoes: [
+                    {
+                        texto: "Escolher somente o alimento que ele mais gosta.",
+                        pontos: 2,
+                        alimentacao: -2,
+                        feedback: "Variar os alimentos ajuda Lucas a ter uma alimentação mais equilibrada."
+                    },
+                    {
+                        texto: "Montar uma refeição variada e equilibrada.",
+                        pontos: 10,
+                        alimentacao: 10,
+                        feedback: "Excelente! Lucas fez uma escolha que contribui para melhorar sua alimentação."
+                    },
+                    {
+                        texto: "Pular o almoço para comer um lanche depois.",
+                        pontos: 0,
+                        alimentacao: -5,
+                        feedback: "Pular refeições não é uma boa estratégia para manter uma rotina alimentar equilibrada."
+                    }
+                ]
+            },
+            {
+                pergunta: "Durante a tarde, Lucas percebeu que estava com sede enquanto estudava. O que ele deveria fazer?",
+                opcoes: [
+                    {
+                        texto: "Continuar estudando e esquecer da água.",
+                        pontos: 0,
+                        hidratacao: -5,
+                        feedback: "Lucas pode aproveitar os momentos de estudo para manter uma garrafa de água por perto."
+                    },
+                    {
+                        texto: "Beber água e deixar uma garrafa por perto para continuar se hidratando.",
+                        pontos: 10,
+                        hidratacao: 10,
+                        feedback: "Boa! Facilitar o acesso à água ajuda Lucas a manter esse hábito durante o dia."
+                    },
+                    {
+                        texto: "Beber apenas quando terminar todas as atividades.",
+                        pontos: 2,
+                        hidratacao: -2,
+                        feedback: "Não é necessário esperar tantas horas para se hidratar."
+                    }
+                ]
+            },
+            {
+                pergunta: "No fim do dia, Lucas percebeu que sua alimentação e hidratação ainda precisam melhorar. Qual seria uma boa atitude?",
+                opcoes: [
+                    {
+                        texto: "Ignorar esses hábitos e continuar fazendo tudo igual.",
+                        pontos: 0,
+                        feedback: "Reconhecer o que pode ser melhorado é um passo importante para mudar hábitos."
+                    },
+                    {
+                        texto: "Fazer pequenas mudanças e tentar manter uma rotina mais equilibrada.",
+                        pontos: 10,
+                        alimentacao: 5,
+                        hidratacao: 5,
+                        feedback: "Excelente! Pequenas mudanças podem ajudar Lucas a construir hábitos mais equilibrados."
+                    },
+                    {
+                        texto: "Tentar mudar tudo de maneira exagerada de uma vez.",
+                        pontos: 2,
+                        alimentacao: 2,
+                        hidratacao: 2,
+                        feedback: "Mudanças graduais e sustentáveis podem ser mais fáceis de manter."
+                    }
+                ]
+            }
+        ];
+        let situacoesMarina = [
+            {
+                pergunta: "Marina ficou usando o celular até tarde e precisa acordar cedo no dia seguinte. O que você recomenda?",
+                opcoes: [
+                    {
+                        texto: "Continuar usando o celular até sentir sono.",
+                        pontos: 0,
+                        descanso: -8,
+                        feedback: "Marina precisa organizar melhor o horário para ter tempo suficiente de descanso."
+                    },
+                    {
+                        texto: "Encerrar o uso do celular e organizar a rotina para dormir mais cedo.",
+                        pontos: 10,
+                        descanso: 10,
+                        feedback: "Boa decisão! Marina está dando mais atenção ao próprio descanso."
+                    },
+                    {
+                        texto: "Dormir poucas horas e tentar compensar depois.",
+                        pontos: 2,
+                        descanso: -2,
+                        feedback: "Manter uma rotina de descanso é mais adequado do que depender de compensações."
+                    }
+                ]
+            },
+            {
+                pergunta: "Depois de um dia cheio de atividades, Marina está cansada, mas pensa em continuar treinando. O que você faria como instrutor?",
+                opcoes: [
+                    {
+                        texto: "Mandar Marina continuar treinando mesmo estando cansada.",
+                        pontos: 0,
+                        atividade: 2,
+                        descanso: -8,
+                        feedback: "Atividade física é importante, mas Marina também precisa respeitar o descanso."
+                    },
+                    {
+                        texto: "Orientar Marina a descansar e manter uma rotina equilibrada de atividades.",
+                        pontos: 10,
+                        atividade: 2,
+                        descanso: 10,
+                        feedback: "Boa escolha! Marina já possui bastante atividade, então o descanso também merece atenção."
+                    },
+                    {
+                        texto: "Dizer para Marina abandonar completamente as atividades.",
+                        pontos: 2,
+                        atividade: -5,
+                        descanso: 3,
+                        feedback: "Não é necessário abandonar as atividades. O ideal é buscar equilíbrio."
+                    }
+                ]
+            },
+            {
+                pergunta: "Marina está com fome, mas decidiu substituir uma refeição por alimentos ultraprocessados. Qual orientação você daria?",
+                opcoes: [
+                    {
+                        texto: "Dizer que ela pode fazer isso em todas as refeições.",
+                        pontos: 0,
+                        alimentacao: -8,
+                        feedback: "Uma alimentação equilibrada não deve depender principalmente de alimentos ultraprocessados."
+                    },
+                    {
+                        texto: "Orientar Marina a buscar uma refeição mais variada e equilibrada.",
+                        pontos: 10,
+                        alimentacao: 10,
+                        feedback: "Boa decisão! Marina pode manter sua rotina ativa e também cuidar da qualidade da alimentação."
+                    },
+                    {
+                        texto: "Dizer para Marina nunca mais comer nenhum alimento ultraprocessado.",
+                        pontos: 2,
+                        alimentacao: 2,
+                        feedback: "O mais importante é buscar equilíbrio e variedade na alimentação."
+                    }
+                ]
+            },
+            {
+                pergunta: "Marina percebeu que está mantendo suas atividades, mas está deixando pouco tempo para descansar. O que ela deveria fazer?",
+                opcoes: [
+                    {
+                        texto: "Aumentar ainda mais o tempo de atividades.",
+                        pontos: 0,
+                        atividade: 3,
+                        descanso: -8,
+                        feedback: "Marina já é bastante ativa. Aumentar ainda mais sem cuidar do descanso não seria uma boa escolha."
+                    },
+                    {
+                        texto: "Organizar a rotina para equilibrar atividade e descanso.",
+                        pontos: 10,
+                        atividade: 2,
+                        descanso: 10,
+                        feedback: "Excelente! O objetivo é encontrar equilíbrio entre diferentes hábitos."
+                    },
+                    {
+                        texto: "Parar completamente de fazer atividades.",
+                        pontos: 2,
+                        atividade: -8,
+                        descanso: 3,
+                        feedback: "Marina não precisa abandonar as atividades, mas deve reservar tempo suficiente para descansar."
+                    }
+                ]
+            },
+            {
+                pergunta: "Marina quer manter uma rotina ativa sem deixar o descanso de lado. Qual seria a melhor estratégia?",
+                opcoes: [
+                    {
+                        texto: "Priorizar somente os exercícios.",
+                        pontos: 2,
+                        atividade: 3,
+                        descanso: -5,
+                        feedback: "Atividade é importante, mas não deve fazer com que Marina deixe o descanso de lado."
+                    },
+                    {
+                        texto: "Planejar horários para atividades, alimentação e descanso.",
+                        pontos: 10,
+                        atividade: 3,
+                        alimentacao: 3,
+                        descanso: 8,
+                        feedback: "Excelente! Planejar a rotina ajuda Marina a encontrar um equilíbrio melhor."
+                    },
+                    {
+                        texto: "Deixar a rotina acontecer sem nenhum planejamento.",
+                        pontos: 1,
+                        descanso: -2,
+                        feedback: "Um pouco de organização pode ajudar Marina a equilibrar melhor seus hábitos."
+                    }
+                ]
+            }
+        ];
+        let situacoesPedro = [
+            {
+                pergunta: "Pedro passou várias horas sentado depois da escola. O que você recomenda?",
+                opcoes: [
+                    {
+                        texto: "Continuar sentado pelo resto do dia.",
+                        pontos: 0,
+                        atividade: -8,
+                        feedback: "Pedro precisa encontrar momentos para se movimentar durante o dia."
+                    },
+                    {
+                        texto: "Fazer uma atividade física adequada e também incluir pausas durante o tempo sentado.",
+                        pontos: 10,
+                        atividade: 10,
+                        feedback: "Boa escolha! Pedro conseguiu reduzir o tempo sedentário e aumentar sua movimentação."
+                    },
+                    {
+                        texto: "Fazer exercícios muito intensos mesmo estando cansado.",
+                        pontos: 2,
+                        atividade: 2,
+                        descanso: -3,
+                        feedback: "Atividade deve ser adequada à situação. Exagerar não significa cuidar melhor da saúde."
+                    }
+                ]
+            },
+            {
+                pergunta: "Pedro percebeu que está fazendo pouca atividade física durante a semana. Qual seria uma boa atitude?",
+                opcoes: [
+                    {
+                        texto: "Não mudar nada na rotina.",
+                        pontos: 0,
+                        atividade: -5,
+                        feedback: "Pedro precisa encontrar formas de incluir mais movimento na rotina."
+                    },
+                    {
+                        texto: "Escolher atividades de que goste e incluí-las gradualmente na rotina.",
+                        pontos: 10,
+                        atividade: 10,
+                        feedback: "Boa decisão! Escolher atividades que Pedro goste pode ajudar a tornar a rotina mais ativa."
+                    },
+                    {
+                        texto: "Tentar fazer o máximo de exercícios possível em um único dia.",
+                        pontos: 2,
+                        atividade: 3,
+                        descanso: -3,
+                        feedback: "Concentrar tudo em um único dia não é a melhor forma de construir uma rotina equilibrada."
+                    }
+                ]
+            },
+            {
+                pergunta: "No fim de semana, Pedro pretende passar praticamente o dia inteiro jogando. O que você recomenda?",
+                opcoes: [
+                    {
+                        texto: "Passar o dia inteiro sentado jogando.",
+                        pontos: 0,
+                        atividade: -8,
+                        feedback: "Pedro deve procurar equilibrar o tempo de tela com momentos de movimento."
+                    },
+                    {
+                        texto: "Dividir o tempo entre jogos, descanso e atividades que envolvam movimento.",
+                        pontos: 10,
+                        atividade: 10,
+                        descanso: 3,
+                        feedback: "Excelente! Pedro conseguiu equilibrar o lazer com mais movimento."
+                    },
+                    {
+                        texto: "Parar de jogar completamente.",
+                        pontos: 2,
+                        atividade: 3,
+                        feedback: "Não é necessário abandonar os jogos. O importante é equilibrar o tempo sentado com outras atividades."
+                    }
+                ]
+            },
+            {
+                pergunta: "Pedro precisa escolher entre continuar sentado no celular ou fazer uma atividade de que gosta. Qual opção você indicaria?",
+                opcoes: [
+                    {
+                        texto: "Continuar no celular por mais algumas horas.",
+                        pontos: 0,
+                        atividade: -5,
+                        feedback: "Pedro já passa bastante tempo parado, então uma oportunidade de se movimentar seria positiva."
+                    },
+                    {
+                        texto: "Escolher uma atividade de que gosta e aproveitar para se movimentar.",
+                        pontos: 10,
+                        atividade: 10,
+                        feedback: "Boa escolha! Fazer algo de que Pedro gosta pode tornar a atividade mais agradável."
+                    },
+                    {
+                        texto: "Fazer qualquer atividade mesmo sem gostar dela.",
+                        pontos: 3,
+                        atividade: 3,
+                        feedback: "A atividade não precisa ser desagradável. Encontrar algo que Pedro goste pode ajudar na continuidade."
+                    }
+                ]
+            },
+            {
+                pergunta: "Pedro quer começar a se movimentar mais, mas não sabe por onde começar. Como você o orientaria?",
+                opcoes: [
+                    {
+                        texto: "Dizer para Pedro começar imediatamente com atividades muito intensas.",
+                        pontos: 0,
+                        atividade: 3,
+                        descanso: -3,
+                        feedback: "Começar de maneira exagerada não é necessário para desenvolver hábitos mais ativos."
+                    },
+                    {
+                        texto: "Ajudar Pedro a escolher atividades adequadas e criar uma rotina gradual.",
+                        pontos: 10,
+                        atividade: 10,
+                        feedback: "Excelente! Uma rotina gradual pode ajudar Pedro a incorporar mais movimento ao seu dia."
+                    },
+                    {
+                        texto: "Dizer para Pedro esperar até ter vontade de se exercitar.",
+                        pontos: 2,
+                        atividade: -2,
+                        feedback: "Planejar pequenas mudanças pode ajudar Pedro a desenvolver uma rotina mais ativa."
+                    }
+                ]
+            }
+        ];
+       
+        function carregarDados() {
+            let dadosSalvos = localStorage.getItem("vidaEmEquilibrio");
+            if (dadosSalvos) {
+                try {
+                    dadosJogador = JSON.parse(dadosSalvos);
+                } catch (erro) {
+                    dadosJogador = {
+                        nome: "",
+                        recorde: 0,
+                        partidas: 0,
+                        ultimaPontuacao: 0
+                    };
+                }
+                document.getElementById("nomeInstrutor").value = dadosJogador.nome || "";
+            }
+        }
+        function salvarDados() {
+            localStorage.setItem("vidaEmEquilibrio", JSON.stringify(dadosJogador));
+        }
+        function trocarTela(idTela) {
+            document.querySelectorAll(".tela").forEach(function(tela) {
+                tela.classList.remove("ativa");
+            });
+            document.getElementById(idTela).classList.add("ativa");
+        }
+        function iniciarJogo() {
+            let nome = document.getElementById("nomeInstrutor").value.trim();
+            if (nome === "") {
+                alert("Digite seu nome para continuar.");
+                return;
+            }
+            dadosJogador.nome = nome;
+            salvarDados();
+            mostrarPersonagens();
+        }
+        function mostrarPersonagens() {
+            let lista = document.getElementById("listaPersonagens");
+            lista.innerHTML = "";
+            personagens.forEach(function(personagem, indice) {
+                lista.innerHTML += `
+                    <div class="card personagem" onclick="selecionarPersonagem(${indice})">
+                        <div class="avatar">
+                            <img src="${personagem.imagem}" alt="Foto de ${personagem.nome}" onerror="this.style.display='none'; this.parentElement.textContent='${personagem.avatar}'">
+                        </div>
+                        <h3>${personagem.nome}</h3>
+                        <div class="idade">${personagem.idade} anos</div>
+                        <p>${personagem.descricao}</p>
+                    </div>
+                `;
+            });
+            trocarTela("telaPersonagens");
+        }
+        function selecionarPersonagem(indice) {
+            personagemAtual = JSON.parse(JSON.stringify(personagens[indice]));
+            pontos = 0;
+            situacaoAtual = 0;
+            atualizarPersonagem();
+            trocarTela("telaPersonagem");
+        }
+        function atualizarPersonagem() {
+            document.getElementById("nomePersonagem").textContent = personagemAtual.nome + " - " + personagemAtual.idade + " anos";
+            document.getElementById("descricaoPersonagem").textContent = personagemAtual.descricao;
+            document.getElementById("fotoPersonagemDetalhes").src = personagemAtual.imagem;
+            document.getElementById("fotoPersonagemDetalhes").alt = "Foto de " + personagemAtual.nome;
+            document.getElementById("valorAlimentacao").textContent = personagemAtual.alimentacao;
+            document.getElementById("valorHidratacao").textContent = personagemAtual.hidratacao;
+            document.getElementById("valorAtividade").textContent = personagemAtual.atividade;
+            document.getElementById("valorDescanso").textContent = personagemAtual.descanso;
+            document.getElementById("barraAlimentacao").style.width = personagemAtual.alimentacao + "%";
+            document.getElementById("barraHidratacao").style.width = personagemAtual.hidratacao + "%";
+            document.getElementById("barraAtividade").style.width = personagemAtual.atividade + "%";
+            document.getElementById("barraDescanso").style.width = personagemAtual.descanso + "%";
+            document.getElementById("pontuacao").textContent = pontos;
+        }
+        function iniciarSituacoes() {
+            situacaoAtual = 0;
+            if (personagemAtual.nome === "Lucas") {
+                situacoesAtuais = situacoesLucas;
+            } else if (personagemAtual.nome === "Marina") {
+                situacoesAtuais = situacoesMarina;
+            } else if (personagemAtual.nome === "Pedro") {
+                situacoesAtuais = situacoesPedro;
+            }
+            mostrarSituacao();
+            trocarTela("telaSituacoes");
+        }
+        function mostrarSituacao() {
+            let situacao = situacoesAtuais[situacaoAtual];
+            document.getElementById("nomeSituacao").textContent = personagemAtual.nome;
+            document.getElementById("fotoPersonagemSituacao").src = personagemAtual.imagem;
+            document.getElementById("fotoPersonagemSituacao").alt = "Foto de " + personagemAtual.nome;
+            document.getElementById("numeroSituacao").textContent = situacaoAtual + 1;
+            document.getElementById("pergunta").textContent = situacao.pergunta;
+            let opcoes = document.getElementById("opcoes");
+            let feedback = document.getElementById("feedback");
+            opcoes.innerHTML = "";
+            feedback.style.display = "none";
+            situacao.opcoes.forEach(function(opcao, indice) {
+                opcoes.innerHTML += `<button class="opcao" onclick="escolherOpcao(${indice})">${opcao.texto}</button>`;
+            });
+        }
+        function escolherOpcao(indice) {
+            let situacao = situacoesAtuais[situacaoAtual];
+            let opcao = situacao.opcoes[indice];
+            pontos += opcao.pontos;
+            if (opcao.alimentacao) {
+                personagemAtual.alimentacao += opcao.alimentacao;
+            }
+            if (opcao.hidratacao) {
+                personagemAtual.hidratacao += opcao.hidratacao;
+            }
+            if (opcao.atividade) {
+                personagemAtual.atividade += opcao.atividade;
+            }
+            if (opcao.descanso) {
+                personagemAtual.descanso += opcao.descanso;
+            }
+            limitarIndicadores();
+            atualizarPersonagem();
+            atualizarFeedback(opcao.feedback);
+            document.querySelectorAll(".opcao").forEach(function(botao) {
+                botao.disabled = true;
+            });
+        }
+        function limitarIndicadores() {
+            personagemAtual.alimentacao = Math.max(0, Math.min(100, personagemAtual.alimentacao));
+            personagemAtual.hidratacao = Math.max(0, Math.min(100, personagemAtual.hidratacao));
+            personagemAtual.atividade = Math.max(0, Math.min(100, personagemAtual.atividade));
+            personagemAtual.descanso = Math.max(0, Math.min(100, personagemAtual.descanso));
+        }
+        function atualizarFeedback(texto) {
+            let feedback = document.getElementById("feedback");
+            feedback.innerHTML = `<strong>Orientação:</strong> ${texto}<br><button onclick="proximaSituacao()">Continuar</button>`;
+            feedback.style.display = "block";
+        }
+        function proximaSituacao() {
+            situacaoAtual++;
+            if (situacaoAtual >= situacoesAtuais.length) {
+                finalizarJogo();
+                return;
+            }
+            mostrarSituacao();
+        }
+        function finalizarJogo() {
+            dadosJogador.partidas++;
+            dadosJogador.ultimaPontuacao = pontos;
+            if (pontos > dadosJogador.recorde) {
+                dadosJogador.recorde = pontos;
+            }
+            salvarDados();
+            document.getElementById("resultadoPersonagem").textContent = personagemAtual.nome;
+            document.getElementById("fotoPersonagemResultado").src = personagemAtual.imagem;
+            document.getElementById("fotoPersonagemResultado").alt = "Foto de " + personagemAtual.nome;
+            document.getElementById("pontuacaoFinal").textContent = pontos + " pontos";
+            document.getElementById("resultadoAlimentacao").textContent = personagemAtual.alimentacao;
+            document.getElementById("resultadoHidratacao").textContent = personagemAtual.hidratacao;
+            document.getElementById("resultadoAtividade").textContent = personagemAtual.atividade;
+            document.getElementById("resultadoDescanso").textContent = personagemAtual.descanso;
+            document.getElementById("resultadoBarraAlimentacao").style.width = personagemAtual.alimentacao + "%";
+            document.getElementById("resultadoBarraHidratacao").style.width = personagemAtual.hidratacao + "%";
+            document.getElementById("resultadoBarraAtividade").style.width = personagemAtual.atividade + "%";
+            document.getElementById("resultadoBarraDescanso").style.width = personagemAtual.descanso + "%";
+            let mensagem = "";
+            if (pontos >= 45) {
+                mensagem = "Excelente trabalho! Você tomou decisões que ajudaram bastante o personagem a desenvolver hábitos mais equilibrados.";
+            } else if (pontos >= 30) {
+                mensagem = "Bom trabalho! Você ajudou o personagem em várias situações, mas ainda existem hábitos que podem ser melhorados.";
+            } else {
+                mensagem = "Você concluiu o acompanhamento. Algumas decisões poderiam ser melhores, então tente novamente e veja se consegue aumentar sua pontuação.";
+            }
+            document.getElementById("mensagemFinal").textContent = mensagem;
+            trocarTela("telaResultado");
+        }
+        function mostrarPerfil() {
+            document.getElementById("perfilNome").textContent = dadosJogador.nome || "---";
+            document.getElementById("perfilRecorde").textContent = dadosJogador.recorde;
+            document.getElementById("perfilPartidas").textContent = dadosJogador.partidas;
+            document.getElementById("perfilUltima").textContent = dadosJogador.ultimaPontuacao;
+            trocarTela("telaPerfil");
+        }
+        function voltarPersonagens() {
+            mostrarPersonagens();
+        }
+        carregarDados();
+    </script>
+</body>
+</html>
